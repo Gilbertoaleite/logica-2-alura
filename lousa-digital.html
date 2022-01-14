@@ -1,0 +1,64 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>desenhando com canvas</title>
+	</head>
+	<body>
+		<h1>Lousa em canvas</h1>
+
+		<canvas width="600" height="400"></canvas>
+		<br />
+
+		Escolha uma cor <input type="color" />
+	</body>
+
+	<script>
+		var cor = document.querySelector('input');
+		var tela = document.querySelector('canvas');
+		var lapis = tela.getContext('2d');
+
+		lapis.fillStyle = 'grey';
+		lapis.fillRect(0, 0, 600, 400);
+
+		var desenha = false;
+		var raio = 10;
+
+		function desenhaCirculo(evento) {
+			if (desenha) {
+				var x = evento.pageX - tela.offsetLeft;
+				var y = evento.pageY - tela.offsetTop;
+
+				if (evento.shiftKey && evento.altKey) {
+					alert('Só aperte uma tecla por vez, por favor!');
+				} else if (evento.shiftKey && raio + 10 <= 40) {
+					raio = raio + 10;
+				} else if (evento.altKey && raio - 5 >= 10) {
+					raio = raio - 5;
+				}
+
+				lapis.fillStyle = cor.value;
+
+				lapis.beginPath();
+				lapis.arc(x, y, raio, 0, 2 * 3.14);
+				lapis.fill();
+			}
+			console.log(x + ',' + y);
+		}
+
+		tela.onmousemove = desenhaCirculo;
+
+		function habilitaDesenhar() {
+			desenha = true;
+		}
+		function desabilitaDesenhar() {
+			desenha = false;
+		}
+		tela.onmousedown = habilitaDesenhar;
+		tela.onmouseup = desabilitaDesenhar;
+	</script>
+</html>
